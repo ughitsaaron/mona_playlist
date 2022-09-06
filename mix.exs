@@ -13,15 +13,16 @@ defmodule Mona.MixProject do
   end
 
   def escript do
-    [main_module: Mona.Application]
+    [
+      main_module: Mona.Main
+    ]
   end
 
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      applications: [:ueberauth_auth0],
       extra_applications: [:logger, :floki, :plug_cowboy, :poison, :httpoison],
-      mod: {Mona.Application, []}
+      mod: {Mona.Main, []}
     ]
   end
 
@@ -31,8 +32,7 @@ defmodule Mona.MixProject do
       {:floki, "~> 0.26.0"},
       {:httpoison, "~> 1.8"},
       {:plug_cowboy, "~> 2.0"},
-      {:poison, "~> 5.0"},
-      {:ueberauth_auth0, "~> 2.0"}
+      {:poison, "~> 5.0"}
     ]
   end
 end
