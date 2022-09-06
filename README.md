@@ -1,21 +1,11 @@
 # Mona
 
-**TODO: Add description**
+A toy Elixir application to generate Spotify playlists from [the Mona show on WFMU](https://wfmu.org/playlists/M1).
 
-## Installation
+## Requirements
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `mona` to your list of dependencies in `mix.exs`:
+Copy `sample.env` as `.env` and fill in the necessary credentials for authorizing the Spotify API
 
-```elixir
-def deps do
-  [
-    {:mona, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/mona](https://hexdocs.pm/mona).
-
+## To do
+- [] Make Spotify authentication a separate concern (e.g., isolated module or application)
+- [] Add a more robust CLI

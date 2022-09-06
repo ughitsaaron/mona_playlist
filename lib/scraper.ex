@@ -1,7 +1,11 @@
 defmodule Mona.Scraper do
-  alias IO.ANSI
-
+  use Agent
   @base_url "https://wfmu.org/"
+
+  def start() do
+    pid = spawn(fn -> :noop end)
+    {:ok, pid}
+  end
 
   defp to_path(path), do: Path.join([@base_url, path])
 
@@ -15,12 +19,23 @@ defmodule Mona.Scraper do
 
   defp find_playlists() do
     fetch("/playlists/M1")
-    |> Floki.attribute("div.showlist ul li a[href^=\"/playlists\"]", "href")
+    |> Floki.attribute("a[href^=\"/playlists\"]", "href")
   end
 
   defp fetch_playlist(url) do
-    [_header | songs] = fetch(url) |> Floki.find("#songs table tr") |> Enum.map(&Floki.children/1)
-    Enum.map(songs, &parse_row/1) |> Enum.filter(& &1)
+    document = fetch(url)
+    [_header | songs] = document |> Floki.find("#songs table tr") |> Enum.map(&Floki.children/1)
+
+    title =
+      document
+      |> Floki.find("h2")
+      |> Enum.take(1)
+      |> Floki.text()
+      |> String.replace("\n", " ")
+      |> String.trim()
+
+    track = Enum.map(songs, &parse_row/1) |> Enum.filter(& &1)
+    {title, track}
   end
 
   defp parse_row([
@@ -34,21 +49,15 @@ defmodule Mona.Scraper do
 
   defp sanitize(str) do
     Floki.text(str)
-    |> String.replace("\n", "")
+    |> String.split("\n")
+    |> List.first()
     |> String.replace("Music behind DJ:", "")
     |> String.trim()
   end
 
-  def init(count \\ 1) do
+  def init_scrape(nth \\ 0) do
     find_playlists()
-    |> Enum.take(count)
-    |> Enum.map(&fetch_playlist/1)
-    |> Enum.each(&print/1)
-  end
-
-  defp print(text) do
-    IO.inspect(ANSI.green())
-    IO.inspect(text)
-    IO.inspect(ANSI.reset())
+    |> Enum.at(nth)
+    |> fetch_playlist()
   end
 end

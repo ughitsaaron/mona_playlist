@@ -1,12 +1,8 @@
 import Config
 
-config :mona, env: config_env()
-
-config :ueberauth, Ueberauth,
-  json_library: Poison,
-  providers: [
-    auth0: {Ueberauth.Strategy.Auth0, []}
+config :mona,
+  env: config_env(),
+  spotify: [
+    client_id: System.get_env("SPOTIFY_CLIENT_ID"),
+    client_secret: System.get_env("SPOTIFY_CLIENT_SECRET")
   ]
-
-import_config("dev.exs")
-import_config("runtime.exs")
