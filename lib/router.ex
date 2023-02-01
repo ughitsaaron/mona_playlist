@@ -12,13 +12,7 @@ defmodule Mona.Router do
   plug(:dispatch)
 
   def init(_opts) do
-    Mona.Spotify.start_link()
-
-    IO.puts("Authenticating with Spotify…")
-
-    if System.find_executable("open") do
-      System.cmd("open", ["http://localhost:4000"])
-    end
+    # Mona.Spotify.start_link()
   end
 
   defp redirect(conn, url) do

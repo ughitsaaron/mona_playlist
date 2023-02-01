@@ -1,4 +1,5 @@
 mona
+.env
 
 # The directory Mix will write compiled artifacts to.
 /_build/
